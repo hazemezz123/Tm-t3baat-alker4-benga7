@@ -310,10 +310,11 @@ const Gallery = ({ images }) => {
         </h1>
 
         <h2
-          className="text-xl font-medium text-center mb-8 text-amber-500"
+          className="text-xl font-medium text-center mb-8 text-amber-500 leading-10"
           dir="rtl"
         >
-          أجواء رمضان
+          موقع يضم جميع صور تم تعبئة الكرش بنجاح ❤
+          <br />
         </h2>
 
         <motion.div
