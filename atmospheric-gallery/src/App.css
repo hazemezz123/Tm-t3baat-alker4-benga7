@@ -1,0 +1,170 @@
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Ramadan-themed animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes lanternSway {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+/* Ramadan-themed decorations */
+.ramadan-lantern {
+  animation: lanternSway 5s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.ramadan-star {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+/* RTL support */
+.rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* Pagination styles */
+.pagination-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.pagination-tab {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.pagination-tab.active {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.pagination-tab:not(.active) {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.dark .pagination-tab:not(.active) {
+  background-color: #374151;
+  color: #e5e7eb;
+}
+
+.pagination-tab:hover:not(.active) {
+  background-color: #d1d5db;
+}
+
+.dark .pagination-tab:hover:not(.active) {
+  background-color: #4b5563;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.pagination-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  transition: all 0.2s;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-indicator {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Image transitions */
+.image-enter {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.image-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.image-exit {
+  opacity: 1;
+}
+
+.image-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+/* Custom scrollbar for Ramadan theme */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f59e0b;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d97706;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #f59e0b;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #fbbf24;
+}
