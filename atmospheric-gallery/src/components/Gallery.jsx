@@ -4,7 +4,6 @@ import ImageCard from "./ImageCard";
 import LoadingAnimation from "./LoadingAnimation";
 import ImageModal from "./ImageModal";
 import FilterBar from "./FilterBar";
-import SearchBar from "./SearchBar";
 import GalleryStats from "./GalleryStats";
 import { categories } from "../data";
 
@@ -307,7 +306,7 @@ const Gallery = ({ images }) => {
           className="text-4xl font-bold text-center mb-2 text-gray-800 dark:text-white"
           dir="rtl"
         >
-          تم تعبئة الكرش بنجاح Gallery
+          تم تعبئة الكرش بنجاح
         </h1>
 
         <h2
@@ -327,8 +326,6 @@ const Gallery = ({ images }) => {
 
       {!isLoading && (
         <>
-          <SearchBar onSearch={handleSearch} />
-
           <div className="flex flex-wrap justify-between items-center mb-6">
             <FilterBar
               categories={categories}
@@ -399,7 +396,6 @@ const Gallery = ({ images }) => {
             onClick={() => {
               setActiveCategory("all");
               setSearchTerm("");
-              handleSearch("");
             }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

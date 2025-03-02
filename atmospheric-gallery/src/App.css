@@ -34,6 +34,27 @@
   }
 }
 
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 /* Ramadan-themed decorations */
 .ramadan-lantern {
   animation: lanternSway 5s ease-in-out infinite;
@@ -42,6 +63,59 @@
 
 .ramadan-star {
   animation: twinkle 3s ease-in-out infinite;
+}
+
+.ramadan-pulse {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.ramadan-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(245, 158, 11, 0) 0%,
+    rgba(245, 158, 11, 0.3) 50%,
+    rgba(245, 158, 11, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* About Us Modal Styles */
+.about-modal-overlay {
+  backdrop-filter: blur(4px);
+}
+
+.about-modal {
+  box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.3),
+    0 8px 10px -6px rgba(245, 158, 11, 0.2);
+}
+
+.about-modal-header {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-bottom: 2px solid rgba(245, 158, 11, 0.3);
+}
+
+.about-modal-content {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5C40.493 5 49 13.507 49 24C49 34.493 40.493 43 30 43C19.507 43 11 34.493 11 24C11 13.507 19.507 5 30 5ZM30 0C17.85 0 8 9.85 8 22C8 34.15 17.85 44 30 44C42.15 44 52 34.15 52 22C52 9.85 42.15 0 30 0Z' fill='%23f59e0b' fill-opacity='0.05'/%3E%3C/svg%3E");
+  background-position: center;
+}
+
+.social-link {
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.1),
+    0 2px 4px -1px rgba(245, 158, 11, 0.06);
+}
+
+.social-icon {
+  transition: all 0.3s ease;
+}
+
+.social-link:hover .social-icon {
+  transform: scale(1.1);
 }
 
 /* RTL support */

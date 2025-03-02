@@ -1,6 +1,12 @@
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect, lazy, Suspense, createContext, useState } from "react";
 import { images } from "./data";
 import "./App.css";
+
+// Create a context for the About Us modal
+export const AboutModalContext = createContext({
+  showAboutModal: false,
+  toggleAboutModal: () => {},
+});
 
 // Lazy load components for better performance
 const Header = lazy(() => import("./components/Header"));
@@ -45,6 +51,14 @@ const LoadingFallback = () => (
 );
 
 function App() {
+  // State for the About Us modal
+  const [showAboutModal, setShowAboutModal] = useState(false);
+
+  // Toggle function for the About Us modal
+  const toggleAboutModal = () => {
+    setShowAboutModal((prev) => !prev);
+  };
+
   // Apply dark mode class based on localStorage on initial load
   useEffect(() => {
     // Apply dark mode if needed
@@ -94,9 +108,20 @@ function App() {
           }
         }
       }
+
+      // Handle about us hash
+      if (hash === "#about") {
+        // Open the About Us modal
+        setShowAboutModal(true);
+      }
     };
 
     window.addEventListener("hashchange", handleHashChange);
+
+    // Check for hash on initial load
+    if (window.location.hash) {
+      setTimeout(handleHashChange, 1000); // Delay to ensure components are loaded
+    }
 
     return () => {
       clearTimeout(timer);
@@ -105,40 +130,42 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
-      {/* Ramadan decorative elements - reduced for better performance */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-10">
-        <div className="absolute top-0 left-0 w-full h-full">
-          {/* Reduced number of decorative elements for better performance */}
-          {[...Array(10)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full bg-amber-500"
-              style={{
-                width: `${Math.random() * 10 + 5}px`,
-                height: `${Math.random() * 10 + 5}px`,
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                opacity: Math.random() * 0.5 + 0.3,
-                animation: `float ${
-                  Math.random() * 10 + 10
-                }s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 5}s`,
-              }}
-            />
-          ))}
+    <AboutModalContext.Provider value={{ showAboutModal, toggleAboutModal }}>
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+        {/* Ramadan decorative elements - reduced for better performance */}
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-10">
+          <div className="absolute top-0 left-0 w-full h-full">
+            {/* Reduced number of decorative elements for better performance */}
+            {[...Array(10)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute rounded-full bg-amber-500"
+                style={{
+                  width: `${Math.random() * 10 + 5}px`,
+                  height: `${Math.random() * 10 + 5}px`,
+                  top: `${Math.random() * 100}%`,
+                  left: `${Math.random() * 100}%`,
+                  opacity: Math.random() * 0.5 + 0.3,
+                  animation: `float ${
+                    Math.random() * 10 + 10
+                  }s ease-in-out infinite`,
+                  animationDelay: `${Math.random() * 5}s`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="relative z-10">
+          <Suspense fallback={<LoadingFallback />}>
+            <Header />
+            <Gallery images={images} />
+            <Footer />
+            <ScrollToTop />
+          </Suspense>
         </div>
       </div>
-
-      <div className="relative z-10">
-        <Suspense fallback={<LoadingFallback />}>
-          <Header />
-          <Gallery images={images} />
-          <Footer />
-          <ScrollToTop />
-        </Suspense>
-      </div>
-    </div>
+    </AboutModalContext.Provider>
   );
 }
 
