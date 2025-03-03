@@ -9,8 +9,6 @@ const importImage = (id) => {
     return new URL(`./assets/images/img${id}.jpg`, import.meta.url).href;
   } catch (error) {
     console.error(`Error importing image img${id}.jpg:`, error);
-    // Fallback to a placeholder image
-    return `https://source.unsplash.com/random/800x600?sig=${id}`;
   }
 };
 
@@ -184,15 +182,15 @@ const generateImageData = () => {
     },
     {
       id: 142,
-      categories: ["forest", "mountains"],
+      categories: ["desert", "sky"],
     },
     {
       id: 143,
-      categories: ["water", "mountains"],
+      categories: ["desert", "sky"],
     },
     {
       id: 144,
-      categories: ["sky", "ramadan"],
+      categories: ["desert", "sky"],
     },
   ];
 
@@ -262,15 +260,4 @@ export const addMoreImages = (startId, count, categories) => {
   return newImages;
 };
 
-// Add 30 more images for testing pagination
-const moreImages = addMoreImages(113, 30, {
-  mountains: true,
-  water: true,
-  forest: true,
-  sky: true,
-  desert: true,
-  ramadan: true,
-});
-
 // Add the new images to the existing array
-images.push(...moreImages);
