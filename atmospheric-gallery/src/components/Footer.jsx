@@ -139,8 +139,8 @@ const Footer = () => {
 
         <div className="mt-8 pt-8 border-t border-amber-200 dark:border-gray-700 text-center">
           <p className="text-gray-600 dark:text-gray-400 text-sm">
-            &copy; {new Date().getFullYear()} تم تعبئة الكرش بنجاح Gallery. جميع
-            الحقوق محفوظة.
+            &copy; {new Date().getFullYear()} تم تعبئة الكرش بنجاح . جميع الحقوق
+            محفوظة.
           </p>
         </div>
       </div>

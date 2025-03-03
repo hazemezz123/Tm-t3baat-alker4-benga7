@@ -1,7 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState, useCallback, memo } from "react";
 
-const ImageModal = ({ image, images, isOpen, onClose, onNavigate }) => {
+const ImageModal = ({
+  image,
+  images,
+  isOpen,
+  onClose,
+  onNavigate,
+  currentIndex = 0,
+}) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
@@ -45,7 +52,6 @@ const ImageModal = ({ image, images, isOpen, onClose, onNavigate }) => {
   }, [image]);
 
   // Find current image index - memoized for performance
-  const currentIndex = images.findIndex((img) => img.id === image?.id);
   const hasNext = currentIndex < images.length - 1;
   const hasPrev = currentIndex > 0;
 
@@ -90,6 +96,24 @@ const ImageModal = ({ image, images, isOpen, onClose, onNavigate }) => {
   const optimizedImageUrl = image
     ? `${image.url}?auto=format&fit=crop&w=1200&q=80`
     : "";
+
+  const downloadImage = () => {
+    if (!image) return;
+
+    setIsDownloading(true);
+
+    // Create a temporary anchor element
+    const link = document.createElement("a");
+    link.href = image.url;
+    link.download = `ramadan-image-${currentIndex + 1}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setTimeout(() => {
+      setIsDownloading(false);
+    }, 1000);
+  };
 
   return (
     <AnimatePresence>
@@ -162,58 +186,6 @@ const ImageModal = ({ image, images, isOpen, onClose, onNavigate }) => {
                     {currentIndex + 1} من {images.length}
                   </p>
                 </div>
-
-                <motion.button
-                  className="px-4 py-2 bg-amber-500 text-white rounded-md flex items-center space-x-2 rtl:space-x-reverse"
-                  onClick={handleDownload}
-                  disabled={isDownloading || !isImageLoaded}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {isDownloading ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      <span>جاري التحميل...</span>
-                    </>
-                  ) : (
-                    <>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                        />
-                      </svg>
-                      <span>تحميل</span>
-                    </>
-                  )}
-                </motion.button>
               </div>
             </motion.div>
 
@@ -301,6 +273,27 @@ const ImageModal = ({ image, images, isOpen, onClose, onNavigate }) => {
                 />
               </svg>
             </motion.button>
+
+            {/* Download button */}
+            <button
+              className="absolute top-2 left-2 z-10 p-2 bg-amber-500 rounded-full text-white hover:bg-amber-600 transition-colors"
+              onClick={downloadImage}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
+              </svg>
+            </button>
           </motion.div>
         </motion.div>
       )}

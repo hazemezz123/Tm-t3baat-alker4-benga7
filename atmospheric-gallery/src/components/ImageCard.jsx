@@ -1,54 +1,31 @@
 import { motion } from "framer-motion";
-import { useState, useEffect, memo } from "react";
+import { useState } from "react";
 
 const ImageCard = ({ image, index, onLoad, onImageClick, layout = "grid" }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [aspectRatio, setAspectRatio] = useState(1);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Calculate a random delay for staggered animation - reduced for better performance
-  const delay = Math.min(index * 0.05, 1); // Cap the delay at 1 second
+  // Optimize image URL with size parameters
+  const optimizedImageUrl = `${image.url}?auto=format&fit=crop&w=500&q=75`;
 
-  // Random rotation for a more dynamic feel (only in grid layout)
-  // Use a deterministic value based on image ID for better performance
-  const randomRotation = layout === "grid" ? ((image.id % 3) - 1) * 0.7 : 0; // Between -0.7 and 0.7 degrees
+  const downloadImage = (e) => {
+    // Prevent the click event from bubbling up to parent elements
+    e.stopPropagation();
 
-  // Calculate aspect ratio for masonry layout
-  useEffect(() => {
-    if (layout === "masonry") {
-      // Use a deterministic value based on image ID for better performance
-      const ratio = 0.7 + (image.id % 8) * 0.1; // Between 0.7 and 1.4
-      setAspectRatio(ratio);
-    } else {
-      setAspectRatio(1);
-    }
-  }, [layout, image.id]);
+    // Create a temporary anchor element
+    const link = document.createElement("a");
+    link.href = image.url;
+    link.download = `ramadan-image-${index + 1}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
-  // Handle image load
   const handleImageLoad = () => {
     setIsLoaded(true);
     if (onLoad) {
       onLoad();
     }
-  };
-
-  // Card variants for animation - simplified for better performance
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.3,
-        delay,
-      },
-    },
-    exit: {
-      opacity: 0,
-      transition: {
-        duration: 0.2,
-      },
-    },
   };
 
   const handleClick = () => {
@@ -57,8 +34,25 @@ const ImageCard = ({ image, index, onLoad, onImageClick, layout = "grid" }) => {
     }
   };
 
-  // Optimize image URL with size parameters
-  const optimizedImageUrl = `${image.url}?auto=format&fit=crop&w=500&q=75`;
+  // Calculate a random slight rotation for a more natural look
+  const randomRotation = Math.random() * 2 - 1; // Between -1 and 1 degrees
+
+  // Determine aspect ratio (use a default if not provided)
+  const aspectRatio = image.aspectRatio || 1;
+
+  // Card animation variants
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        delay: index * 0.05, // Stagger effect
+      },
+    },
+    exit: { opacity: 0, y: 20 },
+  };
 
   return (
     <motion.div
@@ -91,7 +85,7 @@ const ImageCard = ({ image, index, onLoad, onImageClick, layout = "grid" }) => {
 
       <motion.img
         src={optimizedImageUrl}
-        alt={image.alt}
+        alt={image.alt || `Ramadan image ${index + 1}`}
         className={`w-full h-full object-cover ${
           layout === "masonry" ? "absolute inset-0" : ""
         } ${isLoaded ? "opacity-100" : "opacity-0"}`}
@@ -114,55 +108,15 @@ const ImageCard = ({ image, index, onLoad, onImageClick, layout = "grid" }) => {
             transition={{ duration: 0.2 }}
           >
             <p className="text-white font-medium">{image.alt}</p>
-            <div className="flex mt-2 space-x-2">
-              <motion.button
-                className="p-1.5 bg-white/20 rounded-full backdrop-blur-sm"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+            <div className="flex mt-2 space-x-2 rtl:space-x-reverse justify-between">
+              <div className="flex space-x-2 rtl:space-x-reverse">
+                <button
+                  onClick={downloadImage}
+                  className="bg-amber-500 cursor-pointer hover:bg-amber-600 text-white py-1 px-3 rounded-full text-sm font-medium transition-colors duration-300"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
-              </motion.button>
-              <motion.button
-                className="p-1.5 bg-white/20 rounded-full backdrop-blur-sm"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
-                </svg>
-              </motion.button>
+                  تحميل
+                </button>
+              </div>
             </div>
           </motion.div>
         </motion.div>
@@ -171,5 +125,4 @@ const ImageCard = ({ image, index, onLoad, onImageClick, layout = "grid" }) => {
   );
 };
 
-// Memoize the component to prevent unnecessary re-renders
-export default memo(ImageCard);
+export default ImageCard;
