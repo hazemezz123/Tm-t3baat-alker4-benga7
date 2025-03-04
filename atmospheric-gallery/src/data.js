@@ -192,6 +192,10 @@ const generateImageData = () => {
       id: 144,
       categories: ["desert", "sky"],
     },
+    {
+      id: 145,
+      categories: ["desert", "sky"],
+    },
   ];
 
   // Add URL to each image
