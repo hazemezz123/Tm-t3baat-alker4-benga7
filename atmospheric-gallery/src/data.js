@@ -15,6 +15,8 @@ const importImage = (id) => {
 // Function to generate image data
 const generateImageData = () => {
   // Base image data
+  const NumberOfImages = 44;
+
   const baseImages = [
     {
       id: 101,
